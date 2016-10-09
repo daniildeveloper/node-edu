@@ -1,7 +1,7 @@
 var http = require('http'),
     fs = require('fs');
 /**
- * function get file
+ * helper to sync read file and give it to client
  */
 function serveStaticFile(res, path, contentType, responseCode) {
     if (!responseCode) {
