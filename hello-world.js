@@ -1,19 +1,35 @@
-var http = require('http');
+var http = require('http'),
+    fs = require('fs');
+/**
+ * function get file
+ */
+function serveStaticFile(res, path, contentType, responseCode) {
+    if (!responseCode) {
+        responseCode = 200;
+    }
+    fs.readFile(__dirname + path, function (err, data) {
+        if (err) {
+            res.writeHead(500, { 'content-type': 'text/plain' });
+            res.end('500 - Internal error');
+        } else {
+            res.writeHead(responseCode, { 'content-type': contentType });
+            res.end(data);
+        }
+    });
+}
+
 http.createServer(function (req, res) {
     var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
 
     switch (path) {
         case '':
-            res.writeHead(200, { 'content-type': 'text/plain' });
-            res.end('Homepage');
+            serveStaticFile(res, '/public/html/home.html', 'text/html');
             break;
         case '/about':
-            res.writeHead(200, { 'content-type': 'text/plain' });
-            res.end('about');
+            serveStaticFile(res, '/public/html/about.html', 'text/html');
             break;
         default:
-            res.writeHead(404, { 'content-type': 'text-plain' });
-            res.end('Not found! Ohhh!');
+            serveStaticFile(res, '/public/html/home.html', 'text/html');
             break;
     }
 
