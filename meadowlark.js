@@ -1,13 +1,7 @@
 var express = require('express'),
     handlebars = require('express-handlebars').create({ defaultLayout: 'main' });//use layout '/views/lauots/main.handlebars' as main(or root)
 
-var fortunes = [
-    "Win!",
-    "Los!",
-    "Do not forget",
-    "Wait for surprise",
-    "Be simpler, DRY"
-];
+var fortune = require('./lib/fortune');
 
 var app = express();
 app.engine('handlebars', handlebars.engine);
@@ -18,12 +12,11 @@ app.use(express.static(__dirname + "/public"));
 app.get('/', function (req, res) {
     res.render('home');
 });
-app.get('/about', function(req, res) {
-   var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-    res.render('about', {fortune: randomFortune});
+app.get('/about', function (req, res) { 
+    res.render('about', { fortune: fortune.getFortune });
 });
 //404
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.status(404);
     res.render('404');
 });
