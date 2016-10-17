@@ -23,6 +23,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');   //used `handlebars` template engine
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + "/public"));
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(function (req, res, next) {
     res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
     next();
@@ -40,6 +41,16 @@ app.get('/', function (req, res) {
 });
 app.get('/about', function (req, res) {
     res.render('about', { fortune: fortune.getFortune, pageTestScript: '/qa/test-global.js' });
+});
+app.get('/newsletter', function (req, res) {
+    res.render('newsletter', { csrf: 'CSRF token goes here' });
+});
+app.post('/process', function (req, res) {
+    if (req.xhr || req.accepts('json.html') === 'json') {
+        res.send({ succes: true });
+    } else {
+        res.redirect(303, '/thank-you');
+    }
 });
 
 //tours

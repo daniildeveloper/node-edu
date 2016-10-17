@@ -4,9 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Meadowlark travel</title>
-	{{{_section.head}}}
-	{{#if showTests}}
+	{{{_section.head}}} {{#if showTests}}
 	<link rel="stylesheet" href="/vendor/mocha.css"> {{/if}}
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<script src="/vendor/jquery.min.js"></script>
 </head>
 
@@ -22,9 +22,8 @@
     </script>
 	<script src="/qa/test-global.js"></script> {{#if pageTestScript}}
 	<script src="{{pageTestScript}}"></script> {{/if}}
-	<script>mocha.run();</script> {{/if}}
-	
-	{{{_sections.jquery}}}
+	<script>mocha.run();</script> {{/if}} {{{_sections.jquery}}}
+	<script src="/js/bootstrap.min.js"></script>
 </body>
 
 </html>
