@@ -13,7 +13,8 @@ var express = require('express'),
             }
         }
 
-    });//use layout '/views/lauots/main.handlebars' as main(or root)
+    }),
+    formidable = require('formidable');//use layout '/views/lauots/main.handlebars' as main(or root)
 
 var fortune = require('./lib/fortune'),
     weather = require('./lib/weatherData');
@@ -52,6 +53,9 @@ app.post('/process', function (req, res) {
         res.redirect(303, '/thank-you');
     }
 });
+app.get('/thank-you', function (req, res) {
+    res.render('thank-you');
+});
 
 //tours
 app.get("tours/hood-river", function (req, res) {
@@ -69,6 +73,28 @@ app.get('/headers', function (req, res) {
         s += name + ": " + req.headers[name] + "\n";
     }
     res.send(s);
+});
+
+//loaders
+app.get('/contest/vacation-photo', function (req, res) {
+    var now = new Date();
+    res.render('contest/vacation-photo', {
+        year: now.getFullYear,
+        month: now.getMonth()
+    });
+});
+app.post('/contest/vaction-photo/:year/:month', function (req, res) {
+    var form = new formidable.IncomingForm();
+    form.parse(function (err, fields, files) {
+        if (err) {
+            return res.redirect(303, '/error');
+        }
+        console.log("recived fields: ");
+        console.log(fields);
+        console.log("recived-files: ");
+        console.log(files);
+        res.redirect(303, '/thank-you');
+    });
 });
 //404
 app.use(function (req, res, next) {
