@@ -1,0 +1,12 @@
+{{# section 'head'}}
+<script src="/vendor/handlebars.min.js"></script>
+<script id='nurseryRhymeTemplate' type="text/x-handlebars-template">
+    у мери был маленький <b>{{animal}}</b>, его <b>{{bodypart}}</b> был <b>{{adjective}}</b>, как <b>{{noun}}</b>.
+</script> {{/ section}} {{# section 'jquery'}}
+<script>
+    $(document).ready(function() {
+        var nurseryRhymeTemplate = Handlebars.compile(
+            $('#nurseryRhymeTemplate').html()
+        );
+    });
+</script> {{/section}}
