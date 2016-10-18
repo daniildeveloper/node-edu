@@ -17,6 +17,7 @@ var express = require('express'),
     formidable = require('formidable');//use layout '/views/lauots/main.handlebars' as main(or root)
 
 var fortune = require('./lib/fortune'),
+    credentials = require('./lib/credentials'), //personal privae data
     weather = require('./lib/weatherData');
 
 var app = express();
@@ -36,9 +37,11 @@ app.use(function (req, res, next) {
     res.locals.partials.weatherContext = weather.getWeatherData();
     next();
 });
+app.use(require('cookie-parser')(credentials.cookieSecret));
 //marshrute
 app.get('/', function (req, res) {
     res.render('home');
+    res.cookie('monster', 'mom mom');
 });
 app.get('/about', function (req, res) {
     res.render('about', { fortune: fortune.getFortune, pageTestScript: '/qa/test-global.js' });
