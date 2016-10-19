@@ -64,13 +64,28 @@ Get config object with options:
 * static-favicon -
 * morgan(logger) - 
 * method-override - позволяет браузерам использовать не только get&post. только для API.
-* query - считывает заголовок запроса
+* query -s считывает заголовок запроса
 * response-time - добавляет время ответа в заголовок. Для анализа производительности.
-* vhost - виртуальные хосты. Для поддоменов.
+* vhost - виртуальные хосты. Для поддоменов.`
+
+## mailer
+Install ```npm i --save nodemailer```.
 
 ## Tips
 
 * to run mocha test shell it:
 ```bash
 $ mocha -u tdd -R spec public/qa/test-unit.js
+```
+
+## credentials
+
+```javascript
+module.exports = {
+    cookieSecret: 'cookie secret',
+    gmail: {
+        user: 'daniilborowkow@gmail.com',
+        password: '41024910d'
+    }
+};
 ```

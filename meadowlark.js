@@ -14,15 +14,38 @@ var express = require('express'),
         }
 
     }),
+    nodemailer = require('nodemailer'),
     connect = require('connect'),
     formidable = require('formidable');//use layout '/views/lauots/main.handlebars' as main(or root)
 
 var fortune = require('./lib/fortune'),
     credentials = require('./lib/credentials'), //personal privae data
-    validator = require('./lib/vallidator');
-weather = require('./lib/weatherData');
+    validator = require('./lib/vallidator'),
+    weather = require('./lib/weatherData');
 
 var app = express();
+
+var mailTransport = nodemailer.createTransport('SMTP', {
+    host: 'smtp.gmail.com',
+    secureConnection: true,
+    port: 465,
+    auth: {
+        user: credentials.gmail.user,
+        pass: credentials.gmail.password
+    }
+});
+mailTransport.sendMail({
+    from: 'Daniil Borowkow',
+    to: 'daniilborowkow@yandex.ru',
+    subject: 'First letter',
+    text: 'Nodemailer is cool',
+
+}, function (err) {
+    if (err) {
+        console.error("Ubable to send email" + err);
+    }
+});
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');   //used `handlebars` template engine
 app.set('port', process.env.PORT || 3000);
