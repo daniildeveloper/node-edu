@@ -11,7 +11,13 @@
 </head>
 
 <body>
-	<header><img src="/img/logo.jpg" alt="" width="120px"></header>
+	<header>
+		<img src="/img/logo.jpg" alt="" width="120px"> {{#if flash}}
+		<div class="alert alert-dismissible alert-{{flash.type}}">
+			<button class="close" data-dismiss="alert" aria-hidden="true" type="button">&times;</button>
+			<strong>{{flash.intro}}</strong>{{flash.message}}
+		</div>
+	</header>
 	{{{body}}} {{#if showTests}}
 	<div id="mocha"></div>
 	<script src="/vendor/mocha.js"></script>

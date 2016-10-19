@@ -18,7 +18,8 @@ var express = require('express'),
 
 var fortune = require('./lib/fortune'),
     credentials = require('./lib/credentials'), //personal privae data
-    weather = require('./lib/weatherData');
+    validator = require('./lib/vallidator');
+weather = require('./lib/weatherData');
 
 var app = express();
 app.engine('handlebars', handlebars.engine);
@@ -38,6 +39,20 @@ app.use(function (req, res, next) {
     next();
 });
 app.use(require('cookie-parser')(credentials.cookieSecret));
+//session enable
+app.use(require('express-session')({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret
+}));
+
+app.use(function (req, res, next) {
+    //if danger message exists, set it to context
+    //than delete
+    res.locals.flash = req.session.flash;
+    delete req.session.flash;
+    next();
+});
 //marshrute
 app.get('/', function (req, res) {
     res.render('home');
@@ -48,6 +63,25 @@ app.get('/about', function (req, res) {
 });
 app.get('/newsletter', function (req, res) {
     res.render('newsletter', { csrf: 'CSRF token goes here' });
+});
+app.post('/newsletter', function (req, res) {
+    var VALID_EMAIL_REGEX = validator.emailRegex;
+    var name = req.body.name || '',
+        email = req.body.email || '';
+
+    if (!email.match(VALID_EMAIL_REGEX)) {
+        if (req.xhr) {
+            return res.json({
+                error: 'Некорректный адрес электронной почты'
+            });
+        }
+        req.session.flash = {
+            type: 'danger',
+            intro: 'Ошибка проверки',
+            message: 'Введенный вами электроный адрес почты некорректен'
+        };
+        return res.redirect(303, '/newsletter/archive');
+    }
 });
 app.post('/process', function (req, res) {
     if (req.xhr || req.accepts('json.html') === 'json') {
