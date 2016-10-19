@@ -14,6 +14,7 @@ var express = require('express'),
         }
 
     }),
+    connect = require('connect'),
     formidable = require('formidable');//use layout '/views/lauots/main.handlebars' as main(or root)
 
 var fortune = require('./lib/fortune'),
@@ -26,6 +27,7 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');   //used `handlebars` template engine
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + "/public"));
+// app.use(connect.basicAuth)(); //base auth. only with https
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(function (req, res, next) {
     res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
